@@ -14,7 +14,9 @@ class Pais(models.Model):
 class Region(models.Model):
     cdg_region = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=20)
-    id_pais = models.ForeignKey(Pais, models.DO_NOTHING, db_column="id_pais")
+    id_pais = models.ForeignKey(
+        Pais, models.DO_NOTHING, db_column="id_pais", null=True, blank=True
+    )
 
     class Meta:
         db_table = "Region"
@@ -22,7 +24,9 @@ class Region(models.Model):
 
 class Medico(models.Model):
     nro_medico = models.IntegerField(primary_key=True)
-    cdg_region = models.ForeignKey(Region, models.DO_NOTHING, db_column="cdg_region")
+    cdg_region = models.ForeignKey(
+        Region, models.DO_NOTHING, db_column="cdg_region", null=True, blank=True
+    )
     matricula1 = models.IntegerField(blank=True, null=True)
     apeynom = models.CharField(max_length=200)
     especialidad1 = models.CharField(max_length=3)
@@ -58,9 +62,11 @@ class PaisHabilitacionProducto(models.Model):
     # AutoField le dice a Django: "No te preocupes por este ID, Postgres lo generará solo"
     id_habilitacion = models.AutoField(primary_key=True)
     cod_producto = models.ForeignKey(
-        "Productos", models.DO_NOTHING, db_column="cod_producto"
+        "Productos", models.DO_NOTHING, db_column="cod_producto", null=True, blank=True
     )
-    id_pais = models.ForeignKey(Pais, models.DO_NOTHING, db_column="id_pais")
+    id_pais = models.ForeignKey(
+        Pais, models.DO_NOTHING, db_column="id_pais", null=True, blank=True
+    )
 
     class Meta:
         db_table = "Pais_Habilitacion_Producto"
@@ -71,8 +77,16 @@ class Productos(models.Model):
     descripcion_raiz = models.CharField(max_length=30, blank=True, null=True)
     concentracion = models.CharField(max_length=40, blank=True, null=True)
     desc_ext = models.CharField(max_length=150, blank=True, null=True)
-    id_forma = models.ForeignKey("Forma", models.DO_NOTHING, db_column="id_forma")
-    id_labo = models.ForeignKey("Laboratorio", models.DO_NOTHING, db_column="id_labo")
+    id_forma = models.ForeignKey(
+        "Forma", models.DO_NOTHING, db_column="id_forma", null=True, blank=True
+    )
+    id_labo = models.ForeignKey(
+        "Laboratorio",
+        models.DO_NOTHING,
+        db_column="id_labo",
+        null=True,
+        blank=True,
+    )
 
     paises_habilitados = models.ManyToManyField(
         Pais, through="PaisHabilitacionProducto"
