@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "buscador_web.middleware.RestriccionIPMiddleware",
+    "buscador_web.middleware.RestriccionIPGlobalMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -132,3 +132,5 @@ LOGIN_REDIRECT_URL = "/"
 
 # A dónde ir después de cerrar sesión (a la pantalla de login)
 LOGOUT_REDIRECT_URL = "/cuentas/login/"
+
+IP_SUPERUSER = os.environ.get("IP_SUPERUSER", "")
