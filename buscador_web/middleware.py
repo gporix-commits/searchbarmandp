@@ -1,5 +1,5 @@
 from django.core.exceptions import PermissionDenied
-from .models import (
+from personas.models import (
     PerfilUsuario,
 )  # Ajusta la importación según dónde hayas puesto el modelo PerfilUsuario
 
