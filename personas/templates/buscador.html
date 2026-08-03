@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <!-- Tu archivo CSS externo (asegúrate de tener el código del grid de productos y médicos ahí) -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <title>Buscador Inteligente</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 50px; background-color: #f4f4f9; }
+        
+        /* --- NUEVO CONTENEDOR FLEXBOX PARA LAS TARJETAS --- */
+        .buscadores-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Estilo de cada tarjeta blanca */
+        .buscador-card {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+            min-height: 250px;
+            width: 100%;
+        }
+
+        input { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
+        ul { list-style-type: none; padding: 0; }
+        li.resultado-item { padding: 10px; border-bottom: 1px solid #ddd; transition: background-color 0.2s;}
+        li.resultado-item:hover { background-color: #f1f1f1; }
+
+        /* Diseño responsivo para celulares */
+        @media (max-width: 992px) {
+            .buscadores-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra superior de usuario intacta -->
+    <div style="text-align: right; padding: 10px 20px; background: #e0e0e0; margin-bottom: 20px;">
+        <span>Bienvenido, <strong>{{ user.username }}</strong></span>
+        {% if es_encargado %}
+            <a href="{% url 'dashboard' %}" style="background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 3px; margin-left: 15px; font-size: 14px;">
+                📊 Ver Dashboard
+            </a>
+        {% endif %}
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin-left: 15px;">
+            {% csrf_token %}
+            <button type="submit" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Cerrar Sesión</button>
+        </form>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL LADO A LADO -->
+    <div class="buscadores-container">
+        
+        <!-- TARJETA 1: MÉDICOS -->
+        <div class="buscador-card">
+            <h2>Buscador de Médicos</h2>
+            <input type="text" id="caja_busqueda_medicos" placeholder="Empieza a escribir un nombre (ej. Juan)...">
+            <ul id="lista_resultados_medicos"></ul>
+        </div>
+
+        <!-- TARJETA 2: PRODUCTOS -->
+        <div class="buscador-card">
+            <h2>Buscador de Productos</h2>
+            <input type="text" id="caja_busqueda_productos" placeholder="Buscar por descripción (ej. Paracetamol)...">
+            <ul id="lista_resultados_productos"></ul>
+        </div>
+
+    </div>
+
+    <script>
+        // =========================================================
+        // LÓGICA DEL BUSCADOR DE MÉDICOS (Mantiene tu magia intacta)
+        // =========================================================
+        const cajaMedicos = document.getElementById('caja_busqueda_medicos');
+        const listaMedicos = document.getElementById('lista_resultados_medicos');
+
+        cajaMedicos.addEventListener('input', function() {
+            const texto = cajaMedicos.value;
+            
+            if (texto.length < 2) {
+                listaMedicos.innerHTML = '';
+                return;
+            }
+
+            // Asegúrate de que esta URL coincida con tu urls.py
+            fetch(`/buscar/?q=${texto}`)
+            .then(response => response.json())
+            .then(datos => {
+                listaMedicos.innerHTML = ''; 
+                
+                if(datos.length === 0){
+                    listaMedicos.innerHTML = '<li>No se encontraron médicos parecidos.</li>';
+                    return;
+                }
+
+                datos.forEach(medico => {
+                    const item = document.createElement('li');
+                    item.className = 'resultado-item';
+                    item.style.cursor = 'pointer';
+                    item.innerHTML = `
+                        <div class="medico-grid">
+                            <div class="grid-pais">${medico.pais}</div>
+                            <div class="grid-nombre">${medico.nombre}</div>
+                            <div class="grid-inactivo">${medico.inactivo}</div>
+                            <div class="grid-region">Region: ${medico.region}</div>
+                            <div class="grid-matricula-esp">${medico.matricula} &nbsp;&nbsp; ${medico.especialidades}</div>
+                            <div class="grid-provisorio">${medico.provisorio}</div>
+                        </div>
+                    `;
+                    
+                    // Tu evento original de portapapeles e historial
+                    item.addEventListener('click', function() {
+                        navigator.clipboard.writeText(medico.nombre).then(() => {
+                            const textoOriginal = item.innerHTML;
+                            item.innerHTML = `<strong>${medico.nombre}</strong> <span style="color: #28a745; margin-left:10px;">✔ ¡Copiado!</span>`;
+                            setTimeout(() => { item.innerHTML = textoOriginal; }, 1500);
+                        });
+
+                        fetch(`/guardar-busqueda/?id=${medico.id}`)
+                        .then(res => console.log("Se guardó en el historial exitosamente"))
+                        .catch(err => console.error("Error al guardar:", err));
+                    });
+
+                    listaMedicos.appendChild(item);
+                });
+            });
+        });
+
+        // =========================================================
+        // LÓGICA DEL BUSCADOR DE PRODUCTOS
+        // =========================================================
+        const cajaProductos = document.getElementById('caja_busqueda_productos');
+        const listaProductos = document.getElementById('lista_resultados_productos');
+
+        cajaProductos.addEventListener('input', function() {
+            const texto = cajaProductos.value;
+            
+            if (texto.length < 2) {
+                listaProductos.innerHTML = '';
+                return;
+            }
+
+            fetch(`/buscar-producto/?q=${texto}`)
+            .then(response => response.json())
+            .then(datos => {
+                listaProductos.innerHTML = ''; 
+                
+                if(datos.length === 0){
+                    listaProductos.innerHTML = '<li>No se encontraron productos parecidos.</li>';
+                    return;
+                }
+
+                datos.forEach(producto => {
+                    const item = document.createElement('li');
+                    item.className = 'resultado-item';
+                    item.style.cursor = 'pointer';
+                    
+                    // Asignamos la clase roja si no está en SV
+                    const claseAlerta = producto.habilitado_sv ? "" : "producto-invalido";
+
+                    item.innerHTML = `
+                        <div class="producto-grid ${claseAlerta}">
+                            <div class="grid-lab">${producto.abr_labo}</div>
+                            <div class="grid-desc">${producto.desc_completa}</div>
+                            <div class="grid-forma">${producto.forma}</div>
+                            <div class="grid-conc">${producto.concentracion}</div>
+                            <div class="grid-hab">Habilitaciones: ${producto.habilitaciones}</div>
+                        </div>
+                    `;
+
+                    // Lógica del clic para productos
+                    item.addEventListener('click', function() {
+                        if (!producto.habilitado_sv) {
+                            alert('Producto no habilitado para El Salvador');
+                        } else {
+                            // 1. Copiar al portapapeles (Copiamos la descripción completa del producto)
+                            navigator.clipboard.writeText(producto.desc_completa).then(() => {
+                            // Guardamos el HTML original para restaurarlo después
+                                const textoOriginal = item.innerHTML;
+            
+                             // Reemplazamos temporalmente el contenido para dar feedback visual
+                                item.innerHTML = `
+                                    <div style="padding: 20px; text-align: center; color: #28a745; font-weight: bold; font-size: 16px;">
+                                        ✔ ¡Producto copiado exitosamente!
+                                    </div>
+                                `;
+            
+                            // Regresamos la cuadrícula a la normalidad después de 1.5 segundos
+                                setTimeout(() => { item.innerHTML = textoOriginal; }, 1500);
+                            });
+
+                            // 2. Guardar en el historial (personas_usuariobusqueda)
+                            // Agregamos el parámetro "tipo=producto" para que tu base de datos no lo confunda con un médico
+                            fetch(`/guardar-busqueda/?id=${producto.id}&tipo=producto`)
+                            .then(res => console.log("Producto guardado en el historial exitosamente"))
+                            .catch(err => console.error("Error al guardar:", err));
+                        }
+                    });
+                    listaProductos.appendChild(item);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

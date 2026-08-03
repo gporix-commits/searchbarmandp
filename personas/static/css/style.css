@@ -1,0 +1,108 @@
+.medico-grid {
+    display: grid;
+    grid-template-columns: 2fr 5fr 2fr; /* 3 columnas: Izquierda, Centro, Derecha */
+    grid-template-rows: auto auto;      /* 2 filas: Arriba, Abajo */
+    gap: 4px 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+.grid-pais { 
+    font-weight: bold; 
+    text-decoration: underline; 
+    color: #000; 
+}
+
+.grid-nombre { 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #2c5985; 
+    text-transform: lowercase; 
+}
+
+.grid-nombre::first-line { 
+    text-transform: capitalize; 
+}
+
+.grid-inactivo { 
+    color: red; 
+    text-align: right; 
+}
+
+.grid-region { 
+    color: #555; 
+}
+
+.grid-matricula-esp { 
+    color: #333; 
+}
+
+.grid-provisorio { 
+    color: #d39e00; 
+    text-align: right; 
+    font-weight: bold; 
+}
+
+/* =========================================
+   2. ESTILOS PARA EL BUSCADOR DE PRODUCTOS
+========================================= */
+.producto-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 4fr 2fr 2.5fr; /* 4 Columnas */
+    grid-template-rows: auto auto;              /* 2 Filas */
+    gap: 5px 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    font-family: sans-serif;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.grid-lab { 
+    grid-column: 1; 
+    grid-row: 1 / span 2; 
+    display: flex; 
+    align-items: center; 
+    font-weight: bold; 
+}
+
+.grid-desc { 
+    grid-column: 2 / span 3; 
+    grid-row: 1; 
+    font-weight: bold; 
+    color: #000;
+}
+
+.grid-forma { 
+    grid-column: 2; 
+    grid-row: 2; 
+}
+
+.grid-conc { 
+    grid-column: 3; 
+    grid-row: 2; 
+}
+
+.grid-hab { 
+    grid-column: 4; 
+    grid-row: 2; 
+}
+
+/* Alerta visual para productos no habilitados en El Salvador */
+.producto-invalido {
+    background-color: #ffe6e6; 
+}
+
+.producto-invalido:hover {
+    background-color: #ffd1d1;
+}
+
+.producto-invalido .grid-lab,
+.producto-invalido .grid-desc,
+.producto-invalido .grid-forma,
+.producto-invalido .grid-conc,
+.producto-invalido .grid-hab {
+    color: #cc0000; 
+}
