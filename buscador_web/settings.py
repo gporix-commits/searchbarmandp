@@ -52,6 +52,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "buscador_web.middleware.RestriccionIPMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -79,25 +80,11 @@ WSGI_APPLICATION = "buscador_web.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if "DATABASE_URL" in os.environ:
-    # Configuración para Render
-    DATABASES = {
-        "default": dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "busqueda_de",
-            "USER": "postgres",
-            "PASSWORD": "cup123",
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
-    }
+DATABASES = {
+    "default": dj_database_url.config(
+        default="postgresql://buscador_db_latb_user:vLCiYWk7bWdce9wdJrYIw0MBCcD6ZV8H@dpg-d9o24ju417fc73ece2ig-a.ohio-postgres.render.com/buscador_db_latb"
+    )
+}
 
 
 # Password validation

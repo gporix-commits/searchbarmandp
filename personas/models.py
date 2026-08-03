@@ -109,3 +109,16 @@ class UsuarioBusqueda(models.Model):
         null=True,
         blank=True,
     )
+
+
+class PerfilUsuario(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    ip_permitida = models.GenericIPAddressField(
+        blank=True, null=True, help_text="IP autorizada para este usuario"
+    )
+
+    class Meta:
+        db_table = "Perfil_Usuario"
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.ip_permitida or 'Sin IP restringida'}"

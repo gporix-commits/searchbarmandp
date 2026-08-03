@@ -4,56 +4,67 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('personas', '0002_initial'),
+        ("personas", "0002_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Forma',
+            name="Forma",
             fields=[
-                ('id_forma', models.IntegerField(primary_key=True, serialize=False)),
-                ('desc_forma', models.CharField(max_length=40)),
-                ('abr_forma', models.CharField(max_length=5)),
+                ("id_forma", models.IntegerField(primary_key=True, serialize=False)),
+                ("desc_forma", models.CharField(max_length=40)),
+                ("abr_forma", models.CharField(max_length=5)),
             ],
             options={
-                'db_table': 'Forma',
-                'managed': False,
+                "db_table": "Forma",
+                "managed": True,
             },
         ),
         migrations.CreateModel(
-            name='Laboratorio',
+            name="Laboratorio",
             fields=[
-                ('id_labo', models.IntegerField(primary_key=True, serialize=False)),
-                ('desc_labo', models.CharField(max_length=20)),
-                ('abr_labo', models.CharField(max_length=3)),
+                ("id_labo", models.IntegerField(primary_key=True, serialize=False)),
+                ("desc_labo", models.CharField(max_length=20)),
+                ("abr_labo", models.CharField(max_length=3)),
             ],
             options={
-                'db_table': 'Laboratorio',
-                'managed': False,
+                "db_table": "Laboratorio",
+                "managed": True,
             },
         ),
         migrations.CreateModel(
-            name='PaisHabilitacionProducto',
+            name="PaisHabilitacionProducto",
             fields=[
-                ('id_habilitacion', models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "id_habilitacion",
+                    models.AutoField(primary_key=True, serialize=False),
+                ),
             ],
             options={
-                'db_table': 'Pais_Habilitacion_Producto',
-                'managed': False,
+                "db_table": "Pais_Habilitacion_Producto",
+                "managed": True,
             },
         ),
         migrations.CreateModel(
-            name='Productos',
+            name="Productos",
             fields=[
-                ('cod_producto', models.IntegerField(primary_key=True, serialize=False)),
-                ('descripcion_raiz', models.CharField(blank=True, max_length=30, null=True)),
-                ('concentracion', models.CharField(blank=True, max_length=40, null=True)),
+                (
+                    "cod_producto",
+                    models.IntegerField(primary_key=True, serialize=False),
+                ),
+                (
+                    "descripcion_raiz",
+                    models.CharField(blank=True, max_length=30, null=True),
+                ),
+                (
+                    "concentracion",
+                    models.CharField(blank=True, max_length=40, null=True),
+                ),
             ],
             options={
-                'db_table': 'Productos',
-                'managed': False,
+                "db_table": "Productos",
+                "managed": True,
             },
         ),
     ]

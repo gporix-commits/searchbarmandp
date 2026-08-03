@@ -6,61 +6,84 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('personas', '0001_initial'),
+        ("personas", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Medico',
+            name="Medico",
             fields=[
-                ('nro_medico', models.IntegerField(primary_key=True, serialize=False)),
-                ('matricula1', models.IntegerField(blank=True, null=True)),
-                ('apeynom', models.CharField(max_length=200)),
-                ('especialidad1', models.CharField(max_length=3)),
-                ('especialidad2', models.CharField(blank=True, max_length=3, null=True)),
-                ('id_unico', models.IntegerField(blank=True, null=True)),
-                ('provisorio', models.CharField(blank=True, max_length=1, null=True)),
-                ('activo', models.CharField(blank=True, max_length=2, null=True)),
+                ("nro_medico", models.IntegerField(primary_key=True, serialize=False)),
+                ("matricula1", models.IntegerField(blank=True, null=True)),
+                ("apeynom", models.CharField(max_length=200)),
+                ("especialidad1", models.CharField(max_length=3)),
+                (
+                    "especialidad2",
+                    models.CharField(blank=True, max_length=3, null=True),
+                ),
+                ("id_unico", models.IntegerField(blank=True, null=True)),
+                ("provisorio", models.CharField(blank=True, max_length=1, null=True)),
+                ("activo", models.CharField(blank=True, max_length=2, null=True)),
             ],
             options={
-                'db_table': 'Medico',
-                'managed': False,
+                "db_table": "Medico",
+                "managed": True,
             },
         ),
         migrations.CreateModel(
-            name='Pais',
+            name="Pais",
             fields=[
-                ('id_pais', models.IntegerField(primary_key=True, serialize=False)),
-                ('nombre', models.CharField(max_length=50)),
+                ("id_pais", models.IntegerField(primary_key=True, serialize=False)),
+                ("nombre", models.CharField(max_length=50)),
             ],
             options={
-                'db_table': 'Pais',
-                'managed': False,
+                "db_table": "Pais",
+                "managed": True,
             },
         ),
         migrations.CreateModel(
-            name='Region',
+            name="Region",
             fields=[
-                ('cdg_region', models.IntegerField(primary_key=True, serialize=False)),
-                ('nombre', models.CharField(max_length=20)),
+                ("cdg_region", models.IntegerField(primary_key=True, serialize=False)),
+                ("nombre", models.CharField(max_length=20)),
             ],
             options={
-                'db_table': 'Region',
-                'managed': False,
+                "db_table": "Region",
+                "managed": True,
             },
         ),
         migrations.CreateModel(
-            name='UsuarioBusqueda',
+            name="UsuarioBusqueda",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha', models.DateTimeField(auto_now_add=True)),
-                ('medico', models.ForeignKey(db_column='nro_medico', on_delete=django.db.models.deletion.CASCADE, to='personas.medico')),
-                ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("fecha", models.DateTimeField(auto_now_add=True)),
+                (
+                    "medico",
+                    models.ForeignKey(
+                        db_column="nro_medico",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="personas.medico",
+                    ),
+                ),
+                (
+                    "usuario",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
