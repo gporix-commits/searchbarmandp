@@ -8,7 +8,7 @@ class Pais(models.Model):
     abr_pais = models.CharField(max_length=2, null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Pais"
 
 
@@ -18,7 +18,7 @@ class Region(models.Model):
     id_pais = models.ForeignKey(Pais, models.DO_NOTHING, db_column="id_pais")
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Region"
 
 
@@ -35,7 +35,7 @@ class Medico(models.Model):
     causa = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Medico"
 
 
@@ -45,7 +45,7 @@ class Forma(models.Model):
     abr_forma = models.CharField(max_length=5)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Forma"
 
 
@@ -55,7 +55,7 @@ class Laboratorio(models.Model):
     abr_labo = models.CharField(max_length=3)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Laboratorio"
 
 
@@ -68,7 +68,7 @@ class PaisHabilitacionProducto(models.Model):
     id_pais = models.ForeignKey(Pais, models.DO_NOTHING, db_column="id_pais")
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Pais_Habilitacion_Producto"
 
 
@@ -85,7 +85,7 @@ class Productos(models.Model):
     )
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "Productos"
 
 
