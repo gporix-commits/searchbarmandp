@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso al Sistema - Close-Up</title>
+    <title>LogIn</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
 
     <div class="login-card">
         
-        <!-- Nuevo contenedor para el logo -->
         <div class="logo-container">
             <img src="{% static 'img/logo.png' %}" alt="Logo Close-Up" class="login-logo">
         </div>
@@ -38,6 +37,10 @@
             <button type="submit" class="btn-entrar">Entrar</button>
         </form>
     </div>
+
+    <script>
+        sessionStorage.removeItem('splashAceptado');
+    </script>
 
 </body>
 </html>

@@ -5,23 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Searchbar</title>
-    
-    <!-- Mantenemos tu style.css para los grids internos de los resultados -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <!-- Aplicamos el nuevo diseño estructural -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
 
-    <!-- PANTALLA SPLASH DE CONFIDENCIALIDAD (Ahora adentro del sistema) -->
-    <div id="pantalla-splash" class="splash-screen">
-        <div class="splash-content">
-            <h1 class="splash-title">CONFIDENCIALIDAD</h1>
-            <p class="splash-text">La información contenida en este sistema es propiedad exclusiva de Close-Up International.</p>
-            <p class="splash-text">Queda estrictamente prohibida su reproducción, extracción, almacenamiento o transmisión por cualquier medio, así como su difusión a terceros, sin el consentimiento previo y por escrito de Close-Up International.</p>
-            <button id="btn-aceptar" class="btn-aceptar-splash">Entendido y Aceptar</button>
+    <!-- NOTIFICACIÓN DE CONFIDENCIALIDAD -->
+    <div id="notificacion-splash" class="notificacion-confidencial">
+        <div class="notic-header">
+            <img src="{% static 'img/logo.png' %}" alt="Logo">
+            <h3 class="notic-title">CONFIDENCIALIDAD</h3>
         </div>
-        <img src="{% static 'img/logo.png' %}" alt="Logo Close-Up" class="splash-logo">
+        <p class="notic-text">La información contenida en este sistema es propiedad exclusiva de Close-Up International.</p>
+        <p class="notic-text">Queda estrictamente prohibida su reproducción, extracción o difusión a terceros sin consentimiento previo.</p>
+        <button id="btn-aceptar-notic" class="btn-aceptar-notic">Entendido y Aceptar</button>
     </div>
 
     <!-- BARRA DE NAVEGACIÓN -->
@@ -40,12 +37,12 @@
                 {% endif %}
             </span>
             
-            <!-- Botón de Dashboard visible solo para encargados -->
+            <!-- DASHBOARD -->
             {% if es_encargado %}
                 <a href="{% url 'dashboard' %}" class="btn-dashboard">📊 Ver Dashboard</a>
             {% endif %}
             
-            <!-- Botón de Cerrar Sesión -->
+            <!-- CIERRE DE SESION -->
             <form action="{% url 'logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn-logout">Cerrar Sesión</button>
@@ -53,11 +50,11 @@
         </div>
     </nav>
 
-    <!-- CONTENEDOR PRINCIPAL CON LAS TARJETAS -->
+    <!-- CONTENEDOR PRINCIPAL -->
     <div class="main-container">
         <div class="search-sections">
             
-            <!-- TARJETA: BÚSQUEDA DE MÉDICOS -->
+            <!-- BÚSQUEDA MÉDICOS -->
             <div class="search-card">
                 <h3>Buscador de Médicos</h3>
                 <div class="form-group">
@@ -66,7 +63,7 @@
                 <ul id="lista_resultados_medicos" class="resultados-lista"></ul>
             </div>
 
-            <!-- TARJETA: BÚSQUEDA DE PRODUCTOS -->
+            <!-- BÚSQUEDA PRODUCTOS -->
             <div class="search-card">
                 <h3>Buscador de Productos</h3>
                 <div class="form-group">
@@ -189,24 +186,21 @@
         });
     </script>
 
-    <!-- SCRIPT PARA EL SPLASH SCREEN -->
+    <!-- SCRIPT NOTIFICACION -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const splashScreen = document.getElementById('pantalla-splash');
-            const btnAceptar = document.getElementById('btn-aceptar');
+            const notificacion = document.getElementById('notificacion-splash');
+            const btnAceptar = document.getElementById('btn-aceptar-notic');
 
             if (!sessionStorage.getItem('splashAceptado')) {
-                splashScreen.classList.remove('oculto');
-            } else {
-                splashScreen.style.display = 'none';
+                setTimeout(() => {
+                    notificacion.classList.add('mostrar');
+                }, 500);
             }
 
             btnAceptar.addEventListener('click', function() {
-                splashScreen.classList.add('oculto');
+                notificacion.classList.remove('mostrar');
                 sessionStorage.setItem('splashAceptado', 'true');
-                setTimeout(() => {
-                    splashScreen.style.display = 'none';
-                }, 500);
             });
         });
     </script>
