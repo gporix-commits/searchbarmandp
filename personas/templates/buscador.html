@@ -1,66 +1,73 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <meta charset="UTF-8">
-    <title>Buscador</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 50px; background-color: #f4f4f9; }
-        .buscadores-container {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            align-items: flex-start;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .buscador-card {
-            flex: 1;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-            min-height: 250px;
-            width: 100%;
-        }
-
-        input { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
-        ul { list-style-type: none; padding: 0; }
-        li.resultado-item { padding: 10px; border-bottom: 1px solid #ddd; transition: background-color 0.2s;}
-        li.resultado-item:hover { background-color: #f1f1f1; }
-        @media (max-width: 992px) {
-            .buscadores-container { flex-direction: column; }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador - Close-Up</title>
+    
+    <!-- Mantenemos tu style.css para los grids internos de los resultados -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Aplicamos el nuevo diseño estructural -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    <div style="text-align: right; padding: 10px 20px; background: #e0e0e0; margin-bottom: 20px;">
-        <span>Bienvenido, <strong>{{ user.username }}</strong></span>
-        {% if es_encargado %}
-            <a href="{% url 'dashboard' %}" style="background: #28a745; color: white; text-decoration: none; padding: 6px 12px; border-radius: 3px; margin-left: 15px; font-size: 14px;">
-                📊 Ver Dashboard
-            </a>
-        {% endif %}
-        <form method="post" action="{% url 'logout' %}" style="display: inline; margin-left: 15px;">
-            {% csrf_token %}
-            <button type="submit" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Cerrar Sesión</button>
-        </form>
-    </div>
-    <div class="buscadores-container">
-        <div class="buscador-card">
-            <h2>Buscador de Médicos</h2>
-            <input type="text" id="caja_busqueda_medicos" placeholder="Empieza a escribir un nombre (ej. Juan)...">
-            <ul id="lista_resultados_medicos"></ul>
-        </div>
-        <div class="buscador-card">
-            <h2>Buscador de Productos</h2>
-            <input type="text" id="caja_busqueda_productos" placeholder="Buscar por descripción (ej. Paracetamol)...">
-            <ul id="lista_resultados_productos"></ul>
-        </div>
 
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="{% static 'img/logo.png' %}" alt="Logo Close-Up">
+        </div>
+        
+        <div class="navbar-user">
+            <span>
+                Bienvenido, 
+                {% if user.first_name or user.last_name %}
+                    <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                {% else %}
+                    <strong>{{ user.username }}</strong>
+                {% endif %}
+            </span>
+            
+            <!-- Botón de Dashboard visible solo para encargados -->
+            {% if es_encargado %}
+                <a href="{% url 'dashboard' %}" class="btn-dashboard">📊 Ver Dashboard</a>
+            {% endif %}
+            
+            <!-- Botón de Cerrar Sesión -->
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL CON LAS TARJETAS -->
+    <div class="main-container">
+        <div class="search-sections">
+            
+            <!-- TARJETA: BÚSQUEDA DE MÉDICOS -->
+            <div class="search-card">
+                <h3>Buscador de Médicos</h3>
+                <div class="form-group">
+                    <input type="text" id="caja_busqueda_medicos" placeholder="Empieza a escribir un nombre (ej. Juan)...">
+                </div>
+                <ul id="lista_resultados_medicos" class="resultados-lista"></ul>
+            </div>
+
+            <!-- TARJETA: BÚSQUEDA DE PRODUCTOS -->
+            <div class="search-card">
+                <h3>Buscador de Productos</h3>
+                <div class="form-group">
+                    <input type="text" id="caja_busqueda_productos" placeholder="Buscar por descripción (ej. Paracetamol)...">
+                </div>
+                <ul id="lista_resultados_productos" class="resultados-lista"></ul>
+            </div>
+
+        </div>
     </div>
 
+    <!-- TU LÓGICA JAVASCRIPT INTACTA -->
     <script>
         const cajaMedicos = document.getElementById('caja_busqueda_medicos');
         const listaMedicos = document.getElementById('lista_resultados_medicos');
@@ -78,7 +85,7 @@
                 listaMedicos.innerHTML = ''; 
                 
                 if(datos.length === 0){
-                    listaMedicos.innerHTML = '<li>No se encontraron médicos parecidos.</li>';
+                    listaMedicos.innerHTML = '<li class="resultado-item">No se encontraron médicos parecidos.</li>';
                     return;
                 }
 
@@ -112,6 +119,7 @@
                 });
             });
         });
+
         const cajaProductos = document.getElementById('caja_busqueda_productos');
         const listaProductos = document.getElementById('lista_resultados_productos');
 
@@ -129,7 +137,7 @@
                 listaProductos.innerHTML = ''; 
                 
                 if(datos.length === 0){
-                    listaProductos.innerHTML = '<li>No se encontraron productos parecidos.</li>';
+                    listaProductos.innerHTML = '<li class="resultado-item">No se encontraron productos parecidos.</li>';
                     return;
                 }
 
