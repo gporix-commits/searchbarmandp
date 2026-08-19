@@ -27,13 +27,6 @@ body {
     border: 1px solid #e0e0e0;
 }
 
-.login-card h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333333;
-    font-weight: 600;
-}
-
 /* 4. Estilos de los campos de texto */
 .form-group {
     margin-bottom: 20px;
@@ -88,4 +81,15 @@ body {
     background-color: #fde0dc;
     padding: 10px;
     border-radius: 4px;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px; /* Mantiene la misma separación que tenía el texto */
+}
+
+.login-logo {
+    max-width: 85%; /* Ajusta el tamaño para que respire dentro de la tarjeta */
+    height: auto;   /* Mantiene la proporción original de la imagen */
+    display: inline-block;
 }
