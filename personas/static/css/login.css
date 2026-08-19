@@ -85,11 +85,11 @@ body {
 
 .logo-container {
     text-align: center;
-    margin-bottom: 30px; /* Mantiene la misma separación que tenía el texto */
+    margin-bottom: 30px;
 }
 
 .login-logo {
-    max-width: 85%; /* Ajusta el tamaño para que respire dentro de la tarjeta */
-    height: auto;   /* Mantiene la proporción original de la imagen */
+    max-width: 85%;
+    height: auto; 
     display: inline-block;
 }
