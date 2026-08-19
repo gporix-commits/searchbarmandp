@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador - Close-Up</title>
+    <title>Searchbar</title>
     
     <!-- Mantenemos tu style.css para los grids internos de los resultados -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
+
+    <!-- PANTALLA SPLASH DE CONFIDENCIALIDAD (Ahora adentro del sistema) -->
+    <div id="pantalla-splash" class="splash-screen">
+        <div class="splash-content">
+            <h1 class="splash-title">CONFIDENCIALIDAD</h1>
+            <p class="splash-text">La información contenida en este sistema es propiedad exclusiva de Close-Up International.</p>
+            <p class="splash-text">Queda estrictamente prohibida su reproducción, extracción, almacenamiento o transmisión por cualquier medio, así como su difusión a terceros, sin el consentimiento previo y por escrito de Close-Up International.</p>
+            <button id="btn-aceptar" class="btn-aceptar-splash">Entendido y Aceptar</button>
+        </div>
+        <img src="{% static 'img/logo.png' %}" alt="Logo Close-Up" class="splash-logo">
+    </div>
 
     <!-- BARRA DE NAVEGACIÓN -->
     <nav class="navbar">
@@ -50,7 +61,7 @@
             <div class="search-card">
                 <h3>Buscador de Médicos</h3>
                 <div class="form-group">
-                    <input type="text" id="caja_busqueda_medicos" placeholder="Empieza a escribir un nombre (ej. Juan)...">
+                    <input type="text" id="caja_busqueda_medicos">
                 </div>
                 <ul id="lista_resultados_medicos" class="resultados-lista"></ul>
             </div>
@@ -59,15 +70,13 @@
             <div class="search-card">
                 <h3>Buscador de Productos</h3>
                 <div class="form-group">
-                    <input type="text" id="caja_busqueda_productos" placeholder="Buscar por descripción (ej. Paracetamol)...">
+                    <input type="text" id="caja_busqueda_productos">
                 </div>
                 <ul id="lista_resultados_productos" class="resultados-lista"></ul>
             </div>
 
         </div>
     </div>
-
-    <!-- TU LÓGICA JAVASCRIPT INTACTA -->
     <script>
         const cajaMedicos = document.getElementById('caja_busqueda_medicos');
         const listaMedicos = document.getElementById('lista_resultados_medicos');
@@ -179,5 +188,28 @@
             });
         });
     </script>
+
+    <!-- SCRIPT PARA EL SPLASH SCREEN -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const splashScreen = document.getElementById('pantalla-splash');
+            const btnAceptar = document.getElementById('btn-aceptar');
+
+            if (!sessionStorage.getItem('splashAceptado')) {
+                splashScreen.classList.remove('oculto');
+            } else {
+                splashScreen.style.display = 'none';
+            }
+
+            btnAceptar.addEventListener('click', function() {
+                splashScreen.classList.add('oculto');
+                sessionStorage.setItem('splashAceptado', 'true');
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                }, 500);
+            });
+        });
+    </script>
+
 </body>
 </html>
